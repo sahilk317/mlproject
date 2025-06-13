@@ -45,6 +45,32 @@ class DataTransformation:
                 ('encoder',OneHotEncoder()),
                 ('scaler',StandardScaler(with_mean=False))
             ])
+            '''
+            here in categorical pipeline we applied onehotencoder so it will give sparse matrix(most of the values are zero)
+            when we apply standard scalar with mean true it breaks sparcity of matrix 
+            [0, 0, 1]
+            [1, 0, 0]
+
+            StandardScaler(with_mean=True)
+
+
+            mean = [0.5, 0.0, 0.5]
+
+            [0 - 0.5, 0 - 0.0, 1 - 0.5] = [-0.5, 0, 0.5]
+            [1 - 0.5, 0 - 0.0, 0 - 0.5] = [0.5, 0, -0.5] 
+            using formula x-mean/std
+
+            so it breaks sparcity 
+
+            this is happen in only categorical cols and nominal encoding columns bcz there we apply one hot encoding and it gives
+            searse matrix 
+            which is fast and store only nonzero data in memory so we need to maintain that sparse matrix 
+            so to maintain sparse marix we use with_mean false 
+
+            so the formula of standard scalar became x / std
+
+
+            '''
 
 
             logging.info('categorical pipeline created')
@@ -94,7 +120,7 @@ class DataTransformation:
 
             logging.info('data transformed successfully')
 
-            train_arr = np.c_[
+            train_array = np.c_[
                 input_feature_train_array , np.array(output_feature_train_df)
             ]
 
@@ -111,7 +137,7 @@ class DataTransformation:
             logging.info('save object fun run successfully')
 
             return (
-                train_arr,
+                train_array,
                 test_array,
                 self.data_transformation_config.preprocessor_file_path
             )
