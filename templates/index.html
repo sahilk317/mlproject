@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Performance Prediction</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    form {
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    #reading_score,#writing_score{
+      width: 96%;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-size: 15px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    h2 {
+      text-align: center;
+    }
+    #predictionResult {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: blue;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Student Performance Predictor</h2>
+
+  <form id="predictionForm">
+    <label for="gender">Gender</label>
+    <select id="gender" name="gender" required>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select>
+
+    <label for="race_ethnicity">Race/Ethnicity</label>
+    <select id="race_ethnicity" name="race_ethnicity" required>
+      <option value="group A">group A</option>
+      <option value="group B">group B</option>
+      <option value="group C">group C</option>
+      <option value="group D">group D</option>
+      <option value="group E">group E</option>
+    </select>
+
+    <label for="parental_level_of_education">Parental Level of Education</label>
+    <select id="parental_level_of_education" name="parental_level_of_education" required>
+      <option value="some high school">some high school</option>
+      <option value="some college">some college</option>
+      <option value="high school">high school</option>
+      <option value="associate's degree">associate's degree</option>
+      <option value="bachelor's degree">bachelor's degree</option>
+      <option value="master's degree">master's degree</option>
+    </select>
+
+    <label for="lunch">Lunch</label>
+    <select id="lunch" name="lunch" required>
+      <option value="standard">standard</option>
+      <option value="free/reduced">free/reduced</option>
+    </select>
+
+    <label for="test_preparation_course">Test Preparation Course</label>
+    <select id="test_preparation_course" name="test_preparation_course" required>
+      <option value="none">none</option>
+      <option value="completed">completed</option>
+    </select>
+
+    <label for="reading_score">Reading Score</label>
+    <input type="number" id="reading_score" name="reading_score" min="0" max="100" required>
+
+    <label for="writing_score">Writing Score</label>
+    <input type="number" id="writing_score" name="writing_score" min="0" max="100" required>
+
+    <button type="submit">Predict</button>
+  </form>
+
+  <div id="predictionResult"></div>
+
+  <script>
+    document.getElementById('predictionForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const data = {
+        gender: document.getElementById('gender').value,
+        race_ethnicity: document.getElementById('race_ethnicity').value,
+        parental_level_of_education: document.getElementById('parental_level_of_education').value,
+        lunch: document.getElementById('lunch').value,
+        test_preparation_course: document.getElementById('test_preparation_course').value,
+        reading_score: parseInt(document.getElementById('reading_score').value),
+        writing_score: parseInt(document.getElementById('writing_score').value),
+      };
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/predict', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        document.getElementById('predictionResult').innerText = "Predicted Math Score: " + result.result;
+
+      } catch (error) {
+        document.getElementById('predictionResult').innerText = "Error occurred: " + error;
+      }
+    });
+  </script>
+
+</body>
+</html>

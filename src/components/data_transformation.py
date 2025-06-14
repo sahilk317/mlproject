@@ -31,7 +31,8 @@ class DataTransformation:
     def get_data_transformation_obj(self):
         try:
             
-            numerical_columns , categorical_columns = dtypes_of_features()
+            numerical_columns = ['reading_score','writing_score']
+            categorical_columns = ['gender','race_ethnicity','parental_level_of_education','lunch','test_preparation_course']
 
             num_pipeline = Pipeline([
                 ('imputer',SimpleImputer(strategy='median')),
@@ -134,7 +135,7 @@ class DataTransformation:
                 obj = preprocessor
             )
 
-            logging.info('save object fun run successfully')
+            logging.info('save object run successfully')
 
             return (
                 train_array,

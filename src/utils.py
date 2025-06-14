@@ -6,18 +6,31 @@ from src.logger import logging
 from src.components.data_ingestion import DataIngestionConfig
 from sklearn.metrics import r2_score
 import dill 
+import pickle
 
 
+# def dtypes_of_features():
+#     data_ingestion_config = DataIngestionConfig()
+#     data_path = data_ingestion_config.raw_data_path
+#     df = pd.read_csv(data_path)
+#     cols = df.columns
+#     num_features = [col for col in cols if df[col].dtype == 'int']
+#     cat_features = [col for col in cols if df[col].dtype == 'O']
+
+#     return num_features , cat_features
 
 def dtypes_of_features():
     data_ingestion_config = DataIngestionConfig()
     data_path = data_ingestion_config.raw_data_path
     df = pd.read_csv(data_path)
-    cols = df.columns
-    num_features = [col for col in cols if df[col].dtype == 'int']
-    cat_features = [col for col in cols if df[col].dtype == 'O']
 
-    return num_features , cat_features
+    df.columns = df.columns.str.strip()  # Just in case
+
+    num_features = df.select_dtypes(include=['int64', 'float64']).columns.tolist()
+    cat_features = df.select_dtypes(include=['object']).columns.tolist()
+
+    return num_features, cat_features
+
 
 
 def save_object(file_path,obj):
@@ -25,7 +38,7 @@ def save_object(file_path,obj):
         dir_path = os.path.dirname(file_path)
         os.makedirs(dir_path,exist_ok=True)
         with open(file_path,'wb') as f:
-            dill.dump(obj,f)
+            pickle.dump(obj,f)
 
             # dill.dump is used to convert python object into binary format and save it into f file object
 
@@ -55,6 +68,17 @@ def evaluate_model(x_train,x_test,y_train,y_test,models):
         
     except Exception as e:
         raise CustomException(e,sys)
+    
+
+def load_object(file_path):
+
+    with open(file_path,'rb') as f:
+        model = pickle.load(f)
+
+    return model
+
+    
+        
 
     
 
