@@ -63,7 +63,7 @@ class ModelTrainer:
 
             r2 = r2_score(y_test,prediction)
 
-            return r2
+            return r2 , model_report
 
 
 
