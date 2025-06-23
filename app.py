@@ -5,6 +5,8 @@ from pydantic import BaseModel,Field
 from typing import Annotated ,Literal
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
+
 from src.pipeline.predict_pipeline import CustomData,PredictPipeline
 
 app = FastAPI()
@@ -28,6 +30,15 @@ class StudentPerformence(BaseModel):
     test_preparation_course: Annotated[Literal['none', 'completed'], Field(...)]
     reading_score: Annotated[int, Field(..., ge=0, le=100)]
     writing_score: Annotated[int, Field(..., ge=0, le=100)]
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or specify ["http://localhost:3000"] etc.
+    allow_credentials=True,
+    allow_methods=["*"],  # or ["POST"] etc.
+    allow_headers=["*"],
+)
 
 
 

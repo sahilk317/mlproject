@@ -55,7 +55,7 @@ def evaluate_model(x_train,x_test,y_train,y_test,models):
             model = list(models.values())[i]
             model.fit(x_train,y_train)
             y_train_pred = model.predict(x_train)
-            y_test_pred = model.predict(x_train)
+            y_test_pred = model.predict(x_test)
 
             train_model_score = r2_score(y_train,y_train_pred)
 
