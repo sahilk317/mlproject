@@ -1,9 +1,12 @@
-pandas 
+
+fastapi[all]
+uvicorn[standard]
+jinja2
+pandas
 numpy
-matplotlib 
-seaborn
-scikit-learn
+scikit-learn==1.3.0
 dill
-catboost 
-xgboost
-# -e .
+pydantic
+matplotlib
+seaborn
+-e .
