@@ -117,7 +117,7 @@
       };
 
       try {
-        const response = await fetch('http://3.89.103.64:8000/predict', {
+        const response = await fetch('http://'+ window.location.hostname + ':8000/predict', {
           method: 'POST',
           mode:"cors",
           headers: {
